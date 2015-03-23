@@ -42,6 +42,7 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySource("classpath:/de/geofroggerfx/dao/jdbc/database.properties")
 public class DataConfig {
+
     @Autowired
     private Environment env;
 

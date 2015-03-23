@@ -49,7 +49,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public List<CacheListEntry> getAllCacheEntriesSortBy(String name, String asc) {
-        return cacheDAO.getAllCachEntriesSortBy(name, asc);
+        return cacheDAO.getAllCacheEntriesSortBy(name, asc);
     }
 
     @Override

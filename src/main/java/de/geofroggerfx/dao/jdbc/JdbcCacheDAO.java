@@ -112,7 +112,7 @@ public class JdbcCacheDAO implements CacheDAO {
     }
 
     @Override
-    public List<CacheListEntry> getAllCachEntriesSortBy(String name, String asc) {
+    public List<CacheListEntry> getAllCacheEntriesSortBy(String name, String asc) {
         return this.jdbcTemplate.query(
                 "SELECT c.id, c.name AS name, c.name AS code, c.difficulty, c.terrain, c.type FROM "+CACHE_TABLE+" c ORDER BY "+name+" "+asc,
                 (rs, rowNum) -> {

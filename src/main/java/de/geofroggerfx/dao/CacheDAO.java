@@ -37,7 +37,7 @@ public interface CacheDAO {
 
     void save(List<Cache> listOfCaches);
     void update(Cache cache);
-    List<CacheListEntry> getAllCachEntriesSortBy(String name, String asc);
+    List<CacheListEntry> getAllCacheEntriesSortBy(String name, String asc);
 
     Cache getCacheForId(long id);
 
