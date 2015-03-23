@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<VBox id="AnchorPane2" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" HBox.hgrow="ALWAYS">
+    <children>
+        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="-1.0" styleClass="cache-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label alignment="CENTER_LEFT" prefWidth="-1.0" style="&#10;" text="%label.text.cache.list" textAlignment="LEFT" textFill="BLACK" wrapText="false">
+                    <HBox.margin>
+                        <Insets right="10.0" />
+                    </HBox.margin></Label>
+                <ComboBox fx:id="cacheListComboBox" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
+                    <HBox.margin>
+                        <Insets right="10.0" />
+                    </HBox.margin></ComboBox>
+                <MenuButton fx:id="menuIcon" minHeight="16.0" />
+            </children>
+            <padding>
+                <Insets left="16.0" right="16.0" />
+            </padding>
+        </HBox>
+        <ListView fx:id="cacheListView" VBox.vgrow="ALWAYS" />
+    </children>
+    <stylesheets>
+        <URL value="@/de/geofroggerfx/ui/geofroggerfx.css"/>
+    </stylesheets>
+</VBox>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+<VBox prefHeight="800.0" prefWidth="1280.0" minHeight="600.0" minWidth="800.0" xmlns:fx="http://javafx.com/fxml" >
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="%menu.title.file">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#importGpx" text="%menu.title.import.gpx"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#exit" text="%menu.title.quit"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="%menu.title.list">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#newList" text="%menu.title.list.new"/>
+                        <MenuItem mnemonicParsing="false" onAction="#deleteList" text="%menu.title.list.delete"/>
+                    </items>
+                </Menu>
+                <Menu fx:id="pluginsMenu" mnemonicParsing="false" text="%menu.title.plugins"/>
+                <Menu mnemonicParsing="false" text="%menu.title.help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#showSettings" text="%menu.title.settings"/>
+                        <MenuItem mnemonicParsing="false" onAction="#showAboutDialog" text="%menu.title.about"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <BorderPane fx:id="mainPane" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <center>
+                <SplitPane fx:id="contentPane" dividerPositions="0.3779342723004695" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0"
+                           VBox.vgrow="ALWAYS">
+                    <items>
+                        <HBox fx:id="cacheListContent" maxWidth="400" minWidth="300"/>
+                        <AnchorPane fx:id="cacheDetailsContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400" minWidth="600" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #cccccc;">
+                            <padding>
+                                <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
+                            </padding>
+                        </AnchorPane>
+                    </items>
+                </SplitPane>
+            </center>
+        </BorderPane>
+        <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+            <children>
+                <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS"/>
+                <Label fx:id="leftStatus" maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="" HBox.hgrow="ALWAYS">
+                    <font>
+                        <Font size="11.0" fx:id="x3"/>
+                    </font>
+                    <textFill>
+                        <Color blue="0.625" green="0.625" red="0.625" fx:id="x4"/>
+                    </textFill>
+                </Label>
+                <ProgressBar fx:id="progress" prefWidth="300.0" progress="0" HBox.hgrow="ALWAYS"/>
+            </children>
+            <padding>
+                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+            </padding>
+        </HBox>
+    </children>
+    <stylesheets>
+        <URL value="@/de/geofroggerfx/ui/geofroggerfx.css"/>
+    </stylesheets>
+</VBox>
