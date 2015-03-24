@@ -30,11 +30,15 @@ import com.lynden.gmapsfx.MapComponentInitializedListener;
 import com.lynden.gmapsfx.javascript.object.*;
 import de.geofroggerfx.application.SessionContext;
 import de.geofroggerfx.application.SessionContextListener;
+import de.geofroggerfx.model.Attribute;
 import de.geofroggerfx.model.Cache;
 import de.geofroggerfx.ui.FXMLController;
+import de.geofroggerfx.ui.GeocachingIcons;
+import de.geofroggerfx.ui.glyphs.GeofroggerGlyphsDude;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
@@ -47,7 +51,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static de.geofroggerfx.application.SessionContext.CURRENT_CACHE;
+import static de.geofroggerfx.ui.GeocachingIcons.getIcon;
 import static de.geofroggerfx.ui.GeocachingIcons.getStarsAsString;
+import static de.jensd.fx.glyphs.GlyphsDude.createIcon;
 
 /**
  * Created by Andreas on 09.03.2015.
@@ -75,6 +81,9 @@ public class DetailsController extends FXMLController {
 
     @FXML
     private GoogleMapView mapView;
+
+    @FXML
+    private FlowPane attributeList;
 
     private GoogleMap map;
     private Marker marker;
@@ -141,6 +150,11 @@ public class DetailsController extends FXMLController {
         String description = "<html><body><p>"+shortDescription+"</p><p>"+longDescription+"</p></body></html>";
         final WebEngine webEngine = this.description.getEngine();
         webEngine.loadContent(description);
+
+        attributeList.getChildren().clear();
+        for (Attribute attribute: cache.getAttributes()) {
+            attributeList.getChildren().add(createIcon(getIcon(attribute), "1.6em"));
+        }
 
         LatLong latLong = new LatLong(cache.getMainWayPoint().getLatitude(), cache.getMainWayPoint().getLongitude());
         MarkerOptions options = new MarkerOptions();

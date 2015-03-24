@@ -27,11 +27,8 @@
             <children>
                 <TitledPane animated="false" collapsible="false" text="Attributes">
                     <content>
-                        <FlowPane hgap="4.0" prefWidth="200.0" vgap="4.0">
+                        <FlowPane fx:id="attributeList" hgap="4.0" prefWidth="200.0" vgap="4.0">
                             <children>
-                                <FontAwesomeIcon glyphName="CAR" size="1.6em"/>
-                                <FontAwesomeIcon glyphName="CHILD" size="1.6em"/>
-                                <FontAwesomeIcon glyphName="WHEELCHAIR" size="1.6em"/>
                             </children>
                             <opaqueInsets>
                                 <Insets/>

@@ -189,18 +189,6 @@ public class GeocachingIcons {
         // attributeMap.put(GEOTOUR_FALSE(-67);
     }
 
-    public static Text getIconAsText(Attribute attribute, String iconSize) {
-        return createIcon(getIcon(attribute), iconSize);
-    }
-
-    public static Text getIconAsText(Attribute attribute) {
-        return getIconAsText(attribute, GlyphIcon.DEFAULT_ICON_SIZE);
-    }
-
-    public static String getIconAsString(Attribute attribute) {
-        return getIcon(attribute).characterToString();
-    }
-
     public static GlyphIcons getIcon(Attribute attribute) {
         GlyphIcons iconName = attributeMap.get(attribute);
         if (iconName == null) {

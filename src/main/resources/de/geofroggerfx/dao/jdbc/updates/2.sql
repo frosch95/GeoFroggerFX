@@ -5,4 +5,4 @@ CREATE TABLE attribute (
   FOREIGN KEY(cache_id) REFERENCES cache(id) ON DELETE CASCADE
 );
 
-INSERT INTO version(version) values(2);
+UPDATE version SET version=2;
