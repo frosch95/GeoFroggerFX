@@ -25,6 +25,7 @@
  */
 package de.geofroggerfx.ui;
 
+import de.geofroggerfx.dao.jdbc.DatabaseUpdater;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -46,28 +47,19 @@ public class GeoFroggerFX extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        loadCustomFonts();
-
         appContext = new AnnotationConfigApplicationContext(GeoFroggerFX.class);
         String name = appContext.getEnvironment().getProperty("application.name");
         String version = appContext.getEnvironment().getProperty("application.version");
-        GeoFroggerFXController geoFroggerFXController = appContext.getBean(GeoFroggerFXController.class);
 
-        Scene scene = new Scene((Parent) geoFroggerFXController.getView());
+        DatabaseUpdater databaseUpdater = appContext.getBean(DatabaseUpdater.class);
+        try {
+            databaseUpdater.update();
+            loadCustomFonts();
+            showUI(primaryStage, name, version);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-            @Override
-            public void handle(KeyEvent event) {
-                if (isScenicViewShortcutPressed(event)) {
-//                    ScenicView.show(scene);
-                }
-            }
-        });
-        primaryStage.setScene(scene);
-        primaryStage.setTitle(String.format("%s %s", name, version));
-        primaryStage.show();
     }
 
     @Bean
@@ -88,8 +80,12 @@ public class GeoFroggerFX extends Application {
         launch(args);
     }
 
-    private static boolean isScenicViewShortcutPressed(final KeyEvent keyEvent) {
-        return keyEvent.isAltDown() && keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.V);
+    private void showUI(Stage primaryStage, String name, String version) {
+        GeoFroggerFXController geoFroggerFXController = appContext.getBean(GeoFroggerFXController.class);
+        Scene scene = new Scene((Parent) geoFroggerFXController.getView());
+        primaryStage.setScene(scene);
+        primaryStage.setTitle(String.format("%s %s", name, version));
+        primaryStage.show();
     }
 
     private void loadCustomFonts() {
