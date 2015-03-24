@@ -298,8 +298,6 @@ public enum Attribute {
     GEOTOUR_FALSE(-67);
 
 
-    private final static List<Long> attributes = new ArrayList<>();
-
     private int id;
 
     private Attribute(int id) {
@@ -322,16 +320,16 @@ public enum Attribute {
             idToCompare = -idToCompare;
         }
 
+        return getAttributeById(idToCompare);
+    }
+
+    public static Attribute getAttributeById(int id) {
         for (Attribute t : Attribute.values()) {
-            if (t.getId() == idToCompare) {
+            if (t.getId() == id) {
                 return t;
             }
         }
-
-        if (!attributes.contains(id)) {
-            attributes.add(id);
-        }
-
-        throw new IllegalArgumentException("unknown attribute id:" + id + " inc:" + inc);
+        throw new IllegalArgumentException("unknown attribute id:" + id);
     }
+
 }

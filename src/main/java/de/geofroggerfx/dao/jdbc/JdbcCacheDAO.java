@@ -26,12 +26,14 @@
 package de.geofroggerfx.dao.jdbc;
 
 import de.geofroggerfx.dao.CacheDAO;
+import de.geofroggerfx.model.Attribute;
 import de.geofroggerfx.model.Cache;
 import de.geofroggerfx.model.CacheListEntry;
 import de.geofroggerfx.model.Waypoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.w3c.dom.Attr;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,7 +56,7 @@ public class JdbcCacheDAO implements CacheDAO {
     private static final Logger LOGGER = Logger.getLogger("JdbcCacheDAO");
     private static final String CACHE_TABLE = "cache";
     private static final String WAYPOINT_TABLE = "waypoint";
-
+    private static final String ATTRIBUTE_TABLE = "attribute";
 
     private String[] columnListCache = new String[] {
             "id",
@@ -88,6 +90,9 @@ public class JdbcCacheDAO implements CacheDAO {
             "symbol",
             "type"};
 
+    private String[] columnListAttribute = new String[] {
+            "id",
+            "cache_id"};
 
     private JdbcTemplate jdbcTemplate;
 
@@ -100,6 +105,7 @@ public class JdbcCacheDAO implements CacheDAO {
     public void save(List<Cache> listOfCaches) {
         deleteExistingCaches(listOfCaches);
         batchInsertCaches(listOfCaches);
+        batchInsertAttributes(listOfCaches);
         batchInsertWaypoints(listOfCaches);
     }
 
@@ -114,7 +120,7 @@ public class JdbcCacheDAO implements CacheDAO {
     @Override
     public List<CacheListEntry> getAllCacheEntriesSortBy(String name, String asc) {
         return this.jdbcTemplate.query(
-                "SELECT c.id, c.name AS name, c.name AS code, c.difficulty, c.terrain, c.type FROM "+CACHE_TABLE+" c ORDER BY "+name+" "+asc,
+                "SELECT c.id, c.name AS name, c.name AS code, c.difficulty, c.terrain, c.type FROM " + CACHE_TABLE + " c ORDER BY " + name + " " + asc,
                 (rs, rowNum) -> {
                     return new CacheListEntry(
                             rs.getLong("id"),
@@ -136,6 +142,8 @@ public class JdbcCacheDAO implements CacheDAO {
                     Waypoint waypoint = getWaypointForCacheId(cache.getId());
                     cache.setMainWayPoint(waypoint);
                     waypoint.setCache(cache);
+                    List<Attribute> attributes = getAttributesForCacheId(cache.getId());
+                    cache.getAttributes().setAll(attributes);
                     return cache;
                 });
     }
@@ -218,6 +226,33 @@ public class JdbcCacheDAO implements CacheDAO {
         LOGGER.info("try to save "+listOfCaches.size()+" waypoints -> done in "+(endInsert-startInsert)+" ms");
     }
 
+    private void batchInsertAttributes(List<Cache> listOfCaches) {
+        long startInsert = System.currentTimeMillis();
+
+        List<Object[]> batch = listOfCaches.
+                parallelStream().
+                flatMap(cache -> cache.getAttributes().stream().map(attribute -> valuesFromAttribute(cache, attribute))).
+                collect(Collectors.toList());
+        LOGGER.info("try to save "+batch.size()+" attributes");
+
+        try {
+            String insertSQL = generateInsertSQL(ATTRIBUTE_TABLE, columnListAttribute);
+            int[] updateCounts = jdbcTemplate.batchUpdate(
+                    insertSQL,
+                    batch);
+            int updatedRows = 0;
+            for (int count:updateCounts) {
+                updatedRows += count;
+            }
+            LOGGER.info("batch inserted "+updatedRows+" attributes");
+        } catch (Throwable e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
+
+        long endInsert = System.currentTimeMillis();
+        LOGGER.info("try to save "+batch.size()+" attributes -> done in "+(endInsert-startInsert)+" ms");
+    }
+
     private Waypoint getWaypointForCacheId(long cacheId) {
         return this.jdbcTemplate.queryForObject(
                 generateSelectSQL(WAYPOINT_TABLE, columnListWaypoint) + " WHERE cache_id=?",
@@ -227,6 +262,17 @@ public class JdbcCacheDAO implements CacheDAO {
                 });
 
     }
+
+    private List<Attribute> getAttributesForCacheId(long cacheId) {
+        return this.jdbcTemplate.query(
+                generateSelectSQL(ATTRIBUTE_TABLE, columnListAttribute) + " WHERE cache_id=?",
+                new Object[]{cacheId},
+                (rs, rowNum) -> {
+                    return getAttributeFromResultSet(rs);
+                });
+
+    }
+
 
 
     private Cache getCacheFromResultSet(ResultSet rs) throws SQLException {
@@ -288,6 +334,12 @@ public class JdbcCacheDAO implements CacheDAO {
         return waypoint;
     }
 
+    private Attribute getAttributeFromResultSet(ResultSet rs) throws SQLException {
+        Attribute attribute = Attribute.getAttributeById(rs.getInt("id"));
+        return attribute;
+    }
+
+
     private Object[] valuesFromWaypoint(Cache cache) {
         return new Object[]{
                 cache.getMainWayPoint().getName(),
@@ -301,18 +353,13 @@ public class JdbcCacheDAO implements CacheDAO {
                 cache.getMainWayPoint().getSymbol(),
                 null
         };
-        /*
-        "name",
-            "cache_id",
-            "latitude",
-            "longitude",
-            "time",
-            "description",
-            "url",
-            "urlName",
-            "symbol",
-            "type"
-         */
+    }
+
+    private Object[] valuesFromAttribute(Cache cache, Attribute attribute) {
+        return new Object[]{
+                attribute.getId(),
+                cache.getId()
+        };
     }
 
 
