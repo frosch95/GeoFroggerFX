@@ -192,7 +192,7 @@ public class GeocachingIcons {
     public static GlyphIcons getIcon(Attribute attribute) {
         GlyphIcons iconName = attributeMap.get(attribute);
         if (iconName == null) {
-            iconName = FontAwesomeIcons.BLANK;
+            iconName = FontAwesomeIcons.SQUARE_ALT;
         }
         return iconName;
     }
