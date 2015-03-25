@@ -29,7 +29,6 @@ import de.geofroggerfx.application.ProgressEvent;
 import de.geofroggerfx.application.SessionContext;
 import de.geofroggerfx.gpx.GPXReader;
 import de.geofroggerfx.model.Cache;
-import de.geofroggerfx.model.CacheListEntry;
 import de.geofroggerfx.plugins.Plugin;
 import de.geofroggerfx.service.CacheService;
 import de.geofroggerfx.service.PluginService;
@@ -44,9 +43,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +57,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static de.geofroggerfx.application.SessionContext.*;
+import static de.geofroggerfx.application.SessionContext.CACHE_ENTRY_LIST;
 
 /**
  * Created by Andreas on 09.03.2015.
@@ -69,6 +66,45 @@ import static de.geofroggerfx.application.SessionContext.*;
 public class GeoFroggerFXController extends FXMLController {
 
     private static final Logger LOGGER = Logger.getLogger(GeoFroggerFXController.class.getName());
+
+    private static final String LICENSE = "/*\n" +
+            " * Copyright (c) 2013-2015, Andreas Billmann <abi@geofroggerfx.de>\n" +
+            " * All rights reserved.\n" +
+            " *\n" +
+            " * Redistribution and use in source and binary forms, with or without\n" +
+            " * modification, are permitted provided that the following conditions are met:\n" +
+            " *\n" +
+            " * * Redistributions of source code must retain the above copyright notice, this\n" +
+            " *   list of conditions and the following disclaimer.\n" +
+            " * * Redistributions in binary form must reproduce the above copyright notice,\n" +
+            " *   this list of conditions and the following disclaimer in the documentation\n" +
+            " *   and/or other materials provided with the distribution.\n" +
+            " *\n" +
+            " * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"\n" +
+            " * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\n" +
+            " * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE\n" +
+            " * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE\n" +
+            " * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR\n" +
+            " * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF\n" +
+            " * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS\n" +
+            " * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN\n" +
+            " * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)\n" +
+            " * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE\n" +
+            " * POSSIBILITY OF SUCH DAMAGE.\n" +
+            " */";
+
+    private static final String MASTHEAD_TEXT = "GeoFroggerFX by Andreas Billmann <abi@geofroggerfx.de>";
+    private static final String ABOUT_TEXT = "Used libs:\n"
+            + "\t- Groovy 2.0.4\n"
+            + "\t- ControlsFX 8.20.8\n"
+            + "\t- fontawesomefx 8.2\n"
+            + "\t- H2 1.4.186\n"
+            + "\t- GMapsFX 1.1.1\n"
+            + "\t- Spring Framework 4.1.5\n"
+            + "\t- Woodstox 4.4.1\n"
+            + "\t- Sofia-Regular Font\n"
+            + "\t- Elusive-Icons Font\n";
+
 
     @Autowired
     private CacheService cacheService;
@@ -153,11 +189,12 @@ public class GeoFroggerFXController extends FXMLController {
 
     @FXML
     public void showAboutDialog(ActionEvent actionEvent) {
-//        Dialog dialog = new Dialog(null, resourceBundle.getString("dialog.title.about"));
-//        dialog.setMasthead(MASTHEAD_TEXT);
-//        dialog.setContent(ABOUT_TEXT);
-//        dialog.setExpandableContent(new TextArea(LICENSE));
-//        dialog.show();
+        Alert dialog = new Alert(Alert.AlertType.INFORMATION);
+        dialog.setTitle(resourceBundle.getString("dialog.title.about"));
+        dialog.setHeaderText(MASTHEAD_TEXT);
+        dialog.setContentText(ABOUT_TEXT);
+        dialog.getDialogPane().setExpandableContent(new TextArea(LICENSE));
+        dialog.showAndWait();
     }
 
     @FXML
