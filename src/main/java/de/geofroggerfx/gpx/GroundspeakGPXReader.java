@@ -119,6 +119,7 @@ public class GroundspeakGPXReader implements GPXReader {
 
             Waypoint waypoint = null;
             Cache cache = null;
+            Log log = null;
             String currentLevel = null;
             String startTag;
             StringBuffer tagContent = new StringBuffer();
@@ -150,6 +151,9 @@ public class GroundspeakGPXReader implements GPXReader {
                                 break;
                             case LOG:
                                 currentLevel = LOG;
+                                log = new Log();
+                                log.setId(Long.parseLong(reader.getAttributeValue(0)));
+                                cache.getLogs().add(log);
                                 break;
                             case ATTRIBUTE:
                                 cache.getAttributes().add(
@@ -207,7 +211,9 @@ public class GroundspeakGPXReader implements GPXReader {
                             case TYPE:
                                 if (CACHE.equals(currentLevel)) {
                                     cache.setType(Type.groundspeakStringToType(tagContent.toString()));
-                                }
+                                } else if (LOG.equals(currentLevel)) {
+                                    log.setType(LogType.groundspeakStringToType(tagContent.toString()));
+                                } else
                                 break;
                             case PLACED_BY:
                                 cache.setPlacedBy(tagContent.toString());
@@ -241,6 +247,13 @@ public class GroundspeakGPXReader implements GPXReader {
                             case ENCODED_HINTS:
                                 cache.setEncodedHints(tagContent.toString());
                                 break;
+                            case DATE:
+                                log.setDate(DATE_FORMAT.parse(tagContent.toString()));
+                                break;
+                            case TEXT:
+                                log.setText(tagContent.toString());
+                                break;
+
                         }
                         break;
                 }

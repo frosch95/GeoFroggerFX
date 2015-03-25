@@ -50,6 +50,7 @@ public class Cache {
     private BooleanProperty longDescriptionHtml = new SimpleBooleanProperty();
     private StringProperty encodedHints = new SimpleStringProperty();
     private ObjectProperty<Waypoint> mainWayPoint = new SimpleObjectProperty<>();
+    private ObjectProperty<ObservableList<Log>> logs = new SimpleObjectProperty<>(FXCollections.observableArrayList());
 
     public long getId() {
         return id.get();
@@ -289,6 +290,18 @@ public class Cache {
 
     public void setMainWayPoint(Waypoint mainWayPoint) {
         this.mainWayPoint.set(mainWayPoint);
+    }
+
+    public ObservableList<Log> getLogs() {
+        return logs.get();
+    }
+
+    public ObjectProperty<ObservableList<Log>> logsProperty() {
+        return logs;
+    }
+
+    public void setLogs(ObservableList<Log> logs) {
+        this.logs.set(logs);
     }
 
     @Override

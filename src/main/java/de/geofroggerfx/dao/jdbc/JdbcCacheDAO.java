@@ -26,10 +26,7 @@
 package de.geofroggerfx.dao.jdbc;
 
 import de.geofroggerfx.dao.CacheDAO;
-import de.geofroggerfx.model.Attribute;
-import de.geofroggerfx.model.Cache;
-import de.geofroggerfx.model.CacheListEntry;
-import de.geofroggerfx.model.Waypoint;
+import de.geofroggerfx.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -57,6 +54,7 @@ public class JdbcCacheDAO implements CacheDAO {
     private static final String CACHE_TABLE = "cache";
     private static final String WAYPOINT_TABLE = "waypoint";
     private static final String ATTRIBUTE_TABLE = "attribute";
+    private static final String LOG_TABLE = "log";
 
     private String[] columnListCache = new String[] {
             "id",
@@ -94,6 +92,15 @@ public class JdbcCacheDAO implements CacheDAO {
             "id",
             "cache_id"};
 
+    private String[] columnListLog = new String[] {
+            "id",
+            "cache_id",
+            "date",
+            "user_id",
+            "type",
+            "text"};
+
+
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -107,6 +114,7 @@ public class JdbcCacheDAO implements CacheDAO {
         batchInsertCaches(listOfCaches);
         batchInsertAttributes(listOfCaches);
         batchInsertWaypoints(listOfCaches);
+        batchInsertLogs(listOfCaches);
     }
 
     @Override
@@ -144,6 +152,8 @@ public class JdbcCacheDAO implements CacheDAO {
                     waypoint.setCache(cache);
                     List<Attribute> attributes = getAttributesForCacheId(cache.getId());
                     cache.getAttributes().setAll(attributes);
+                    List<Log> logs = getLogsForCacheId(cache.getId());
+                    cache.getLogs().setAll(logs);
                     return cache;
                 });
     }
@@ -253,6 +263,33 @@ public class JdbcCacheDAO implements CacheDAO {
         LOGGER.info("try to save "+batch.size()+" attributes -> done in "+(endInsert-startInsert)+" ms");
     }
 
+    private void batchInsertLogs(List<Cache> listOfCaches) {
+        long startInsert = System.currentTimeMillis();
+
+        List<Object[]> batch = listOfCaches.
+                parallelStream().
+                flatMap(cache -> cache.getLogs().stream().map(log -> valuesFromLog(cache, log))).
+                collect(Collectors.toList());
+        LOGGER.info("try to save "+batch.size()+" logs");
+
+        try {
+            String insertSQL = generateInsertSQL(LOG_TABLE, columnListLog);
+            int[] updateCounts = jdbcTemplate.batchUpdate(
+                    insertSQL,
+                    batch);
+            int updatedRows = 0;
+            for (int count:updateCounts) {
+                updatedRows += count;
+            }
+            LOGGER.info("batch inserted "+updatedRows+" logs");
+        } catch (Throwable e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
+
+        long endInsert = System.currentTimeMillis();
+        LOGGER.info("try to save "+batch.size()+" logs -> done in "+(endInsert-startInsert)+" ms");
+    }
+
     private Waypoint getWaypointForCacheId(long cacheId) {
         return this.jdbcTemplate.queryForObject(
                 generateSelectSQL(WAYPOINT_TABLE, columnListWaypoint) + " WHERE cache_id=?",
@@ -272,6 +309,17 @@ public class JdbcCacheDAO implements CacheDAO {
                 });
 
     }
+
+    private List<Log> getLogsForCacheId(long cacheId) {
+        return this.jdbcTemplate.query(
+                generateSelectSQL(LOG_TABLE, columnListLog) + " WHERE cache_id=?",
+                new Object[]{cacheId},
+                (rs, rowNum) -> {
+                    return getLogFromResultSet(rs);
+                });
+
+    }
+
 
 
 
@@ -339,6 +387,15 @@ public class JdbcCacheDAO implements CacheDAO {
         return attribute;
     }
 
+    private Log getLogFromResultSet(ResultSet rs) throws SQLException {
+        Log log = new Log();
+        log.setId(rs.getLong("id"));
+        log.setDate(rs.getDate("date"));
+        log.setText(rs.getString("text"));
+        log.setType(LogType.groundspeakStringToType(rs.getString("type")));
+        return log;
+    }
+
 
     private Object[] valuesFromWaypoint(Cache cache) {
         return new Object[]{
@@ -362,6 +419,16 @@ public class JdbcCacheDAO implements CacheDAO {
         };
     }
 
+    private Object[] valuesFromLog(Cache cache, Log log) {
+        return new Object[]{
+                log.getId(),
+                cache.getId(),
+                log.getDate(),
+                null, //log.getFinder().getId(),
+                log.getType().toGroundspeakString(),
+                log.getText()
+        };
+    }
 
     private Object[] valuesFromCache(Cache cache, long id) {
         return Arrays.asList(valuesFromCache(cache), id).toArray();

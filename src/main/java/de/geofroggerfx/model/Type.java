@@ -45,7 +45,6 @@ public enum Type {
     MEGA_EVENT("Mega-Event Cache"),
     MYSTERY_CACHE("Mystery Cache");
 
-    private int id;
     private String groundspeakString;
 
     private Type(String groundspeakString) {
