@@ -8,7 +8,4 @@ import javafx.scene.text.Font;
  */
 public class GeofroggerGlyphsDude extends GlyphsDude {
 
-    static {
-        Font.loadFont(GeofroggerGlyphsDude.class.getResource(ElusiveIcon.TTF_PATH).toExternalForm(), 10.0);
-    }
 }

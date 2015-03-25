@@ -27,6 +27,7 @@ package de.geofroggerfx.ui;
 
 import de.geofroggerfx.model.Attribute;
 import de.geofroggerfx.model.Type;
+import de.geofroggerfx.ui.glyphs.ElusiveIcons;
 import de.jensd.fx.glyphs.GlyphIcon;
 import de.jensd.fx.glyphs.GlyphIcons;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;

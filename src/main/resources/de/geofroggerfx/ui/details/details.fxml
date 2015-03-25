@@ -18,6 +18,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 
 <?import com.lynden.gmapsfx.GoogleMapView?>
+<?import de.geofroggerfx.ui.glyphs.ElusiveIcon?>
 <BorderPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="400"
             style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.40"
@@ -29,6 +30,8 @@
                     <content>
                         <FlowPane fx:id="attributeList" hgap="4.0" prefWidth="200.0" vgap="4.0">
                             <children>
+                                <!--<FontAwesomeIcon glyphName="CAR" size="1.6em"/>-->
+                                <!--<ElusiveIcon glyphName="YOUTUBE" size="1.6em"/>-->
                             </children>
                             <opaqueInsets>
                                 <Insets/>

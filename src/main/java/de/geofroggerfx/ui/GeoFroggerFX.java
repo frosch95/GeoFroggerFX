@@ -83,6 +83,17 @@ public class GeoFroggerFX extends Application {
     private void showUI(Stage primaryStage, String name, String version) {
         GeoFroggerFXController geoFroggerFXController = appContext.getBean(GeoFroggerFXController.class);
         Scene scene = new Scene((Parent) geoFroggerFXController.getView());
+
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent event) {
+                if (isScenicViewShortcutPressed(event)) {
+//                    ScenicView.show(scene);
+                }
+            }
+        });
+
         primaryStage.setScene(scene);
         primaryStage.setTitle(String.format("%s %s", name, version));
         primaryStage.show();
@@ -90,5 +101,10 @@ public class GeoFroggerFX extends Application {
 
     private void loadCustomFonts() {
         Font.loadFont(GeoFroggerFX.class.getResource("/fonts/sofia/Sofia-Regular.otf").toExternalForm(), 24);
+        Font.loadFont(GeoFroggerFX.class.getResource("/fonts/elusive/Elusive-Icons.ttf").toExternalForm(), 10);
+    }
+
+    private static boolean isScenicViewShortcutPressed(final KeyEvent keyEvent) {
+        return keyEvent.isAltDown() && keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.V);
     }
 }
