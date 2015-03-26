@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.web.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
+<?import com.lynden.gmapsfx.*?>
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.effect.*?>
+<?import javafx.scene.web.*?>
+<?import com.lynden.gmapsfx.GoogleMapView?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
 <?import java.net.URL?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 
-<?import com.lynden.gmapsfx.GoogleMapView?>
-<?import de.geofroggerfx.ui.glyphs.ElusiveIcon?>
-<BorderPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="400"
-            style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.40"
-            xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="400" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
     <right>
         <VBox minWidth="200.0" prefHeight="200.0" spacing="8.0" BorderPane.alignment="CENTER">
             <children>
@@ -30,111 +25,87 @@
                     <content>
                         <FlowPane fx:id="attributeList" hgap="4.0" prefWidth="200.0" vgap="4.0">
                             <children>
-                                <!--<FontAwesomeIcon glyphName="CAR" size="1.6em"/>-->
-                                <!--<ElusiveIcon glyphName="YOUTUBE" size="1.6em"/>-->
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                         </FlowPane>
                     </content>
                 </TitledPane>
                 <TitledPane animated="false" collapsible="false" text="Logs">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane>
                             <children>
-                                <GridPane hgap="4.0" vgap="4.0" AnchorPane.bottomAnchor="0.0"
-                                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                          AnchorPane.topAnchor="0.0">
+                                <GridPane fx:id="logList" hgap="4.0" vgap="4.0" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columnConstraints>
-                                        <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     </columnConstraints>
-                                    <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                        <RowConstraints minHeight="10.0" vgrow="NEVER"/>
-                                    </rowConstraints>
-                                    <children>
-                                        <FontAwesomeIcon glyphName="EXTERNAL_LINK" size="1.2em" GridPane.columnIndex="1"
-                                                         GridPane.halignment="RIGHT" GridPane.rowIndex="2"
-                                                         GridPane.valignment="BOTTOM"/>
-                                        <Label alignment="TOP_LEFT"
-                                               text="Bei einer Spontan-Tour mit den Hoppels haben wir heute nun zum 2. Mal den Geisterkäfer besucht.Immer wieder nett [;)]. Die Zeit hinterlässt immer mehr ihre Spuren.Nach kurzer Suche war das Final gefunden und der Rest schnell erledigt.Auch wir danken für's reloaden [8D].Viele Grüße - die Jedi-Ritter"
-                                               wrapText="true" GridPane.columnIndex="1"/>
-                                        <FontAwesomeIcon glyphName="CHECK" size="1.2em" GridPane.valignment="TOP"/>
-                                        <FontAwesomeIcon glyphName="TIMES" size="1.2em" GridPane.rowIndex="1"
-                                                         GridPane.valignment="TOP"/>
-                                        <Label alignment="TOP_LEFT"
-                                               text="Hier war ich doch schon mal...Nach einer gefühlten Ewigkeit die Dose dann doch noch gefunden.DFDC"
-                                               wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                                    </children>
+                           <rowConstraints>
+                              <RowConstraints />
+                           </rowConstraints>
                                 </GridPane>
+                        <FlowPane fx:id="logButtonPane" alignment="BOTTOM_RIGHT" columnHalignment="RIGHT" layoutX="-10.0" layoutY="-23.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="28.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                             </children>
                         </AnchorPane>
                     </content>
                 </TitledPane>
                 <TitledPane animated="false" collapsible="false" prefHeight="200.0" prefWidth="200.0" text="Trackables">
                     <content>
-                        <ListView prefHeight="200.0" prefWidth="200.0"/>
+                        <ListView prefHeight="200.0" prefWidth="200.0" />
                     </content>
                 </TitledPane>
                 <TitledPane animated="false" collapsible="false" prefHeight="200.0" prefWidth="200.0" text="Map">
                     <content>
-                        <GoogleMapView fx:id="mapView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="NEVER"/>
+                        <GoogleMapView fx:id="mapView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="NEVER" />
                     </content>
                 </TitledPane>
             </children>
             <BorderPane.margin>
-                <Insets left="8.0" right="8.0"/>
+                <Insets left="8.0" right="8.0" />
             </BorderPane.margin>
         </VBox>
     </right>
     <top>
         <GridPane BorderPane.alignment="CENTER">
             <columnConstraints>
-                <ColumnConstraints hgrow="NEVER" minWidth="60.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="NEVER" minWidth="60.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="NEVER" minWidth="60.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="NEVER" minWidth="60.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Label fx:id="cacheName" styleClass="cache-h1" text="Cache-Name" GridPane.columnSpan="4"/>
-                <Label text="Difficulty:" GridPane.rowIndex="1"/>
-                <FontAwesomeIcon fx:id="cacheDifficulty" glyphName="BLANK"
-                                 glyphStyle="-fx-fill: linear-gradient(#e8e474 0%, #edcf59 70%, #bfba26 85%);"
-                                 size="16.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <Label text="Terrain:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                <FontAwesomeIcon fx:id="cacheTerrain" glyphName="BLANK"
-                                 glyphStyle="-fx-fill: linear-gradient(#e8e474 0%, #edcf59 70%, #bfba26 85%);"
-                                 size="16.0" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                <Label fx:id="cacheName" styleClass="cache-h1" text="Cache-Name" GridPane.columnSpan="4" />
+                <Label text="Difficulty:" GridPane.rowIndex="1" />
+                <FontAwesomeIcon fx:id="cacheDifficulty" glyphName="BLANK" glyphStyle="-fx-fill: linear-gradient(#e8e474 0%, #edcf59 70%, #bfba26 85%);" size="16.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="Terrain:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <FontAwesomeIcon fx:id="cacheTerrain" glyphName="BLANK" glyphStyle="-fx-fill: linear-gradient(#e8e474 0%, #edcf59 70%, #bfba26 85%);" size="16.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             </children>
         </GridPane>
     </top>
     <center>
-        <ScrollPane fitToHeight="true" fitToWidth="true" minWidth="400.0" prefHeight="200.0" prefWidth="400.0"
-                    style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+        <ScrollPane fitToHeight="true" fitToWidth="true" minWidth="400.0" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
             <content>
-                <VBox fx:id="mainContent" style="-fx-background-color: #ffffff;" spacing="10">
+                <VBox fx:id="mainContent" spacing="10" style="-fx-background-color: #ffffff;">
                     <children>
-                        <WebView fx:id="description" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                        <WebView fx:id="description" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                     </children>
                 </VBox>
             </content>
         </ScrollPane>
     </center>
     <padding>
-        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
     </padding>
     <effect>
-        <DropShadow/>
+        <DropShadow />
     </effect>
     <stylesheets>
-        <URL value="@/de/geofroggerfx/ui/geofroggerfx.css"/>
+        <URL value="@/de/geofroggerfx/ui/geofroggerfx.css" />
     </stylesheets>
 </BorderPane>
