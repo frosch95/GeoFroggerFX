@@ -34,24 +34,18 @@ import de.geofroggerfx.model.Attribute;
 import de.geofroggerfx.model.Cache;
 import de.geofroggerfx.model.Log;
 import de.geofroggerfx.ui.FXMLController;
-import de.geofroggerfx.ui.GeocachingIcons;
 import de.geofroggerfx.ui.glyphs.GeofroggerGlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.control.*;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Window;
+import org.controlsfx.control.PopOver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -158,20 +152,81 @@ public class DetailsController extends FXMLController {
         Button logLink = GeofroggerGlyphsDude.createIconButton(FontAwesomeIcons.EXTERNAL_LINK);
         logLink.setStyle("-fx-background-color: transparent;");
         logButtonPane.getChildren().add(logLink);
+
+
         logLink.setOnAction(event -> {
             Cache cache = (Cache) sessionContext.getData(CURRENT_CACHE);
             if (cache != null) {
-                StringBuilder sb = new StringBuilder();
-                for (Log log: cache.getLogs()) {
-                    sb.append(log.getText());
-                    sb.append("\n--------------------------------------\n");
-                }
-
-                Alert logWindow = new Alert(Alert.AlertType.INFORMATION);
-                logWindow.setContentText(sb.toString());
-                logWindow.showAndWait();
+                showLogPopOver(logLink, cache);
             }
         });
+    }
+
+    private void showLogPopOver(Button logLink, Cache cache) {
+        PopOver popOver = new PopOver();
+
+        Window window = logLink.getScene().getWindow();
+
+        VBox vbox = new VBox();
+        vbox.setFillWidth(true);
+        vbox.setMaxWidth(window.getWidth() - 420);
+        vbox.setSpacing(60.0);
+        vbox.setPadding(new Insets(30,20,30,20));
+        vbox.setStyle("-fx-background-color: white");
+
+        for (Log log: cache.getLogs()) {
+
+            BorderPane borderPane = new BorderPane();
+
+            Text icon = GeofroggerGlyphsDude.createIcon(FontAwesomeIcons.CHECK);
+            Label date = new Label(log.getDate().toString());
+            date.setStyle("-fx-font-weight: bold; -fx-font-size: 1.2em;");
+            Label name = new Label("the user's name");
+            name.setStyle("-fx-font-weight: bold; -fx-font-size: 1.2em;");
+
+            HBox.setHgrow(icon, Priority.NEVER);
+            HBox.setHgrow(date, Priority.NEVER);
+            HBox.setHgrow(name, Priority.ALWAYS);
+
+            HBox header = new HBox();
+            header.setSpacing(10.0);
+            header.getChildren().addAll(icon, date, name);
+            header.setPadding(new Insets(10, 10, 10, 10));
+            header.setStyle("-fx-border-color: transparent transparent gray transparent");
+
+            borderPane.setTop(header);
+
+            Label logText = new Label(log.getText());
+            logText.setWrapText(true);
+            logText.setPadding(new Insets(10,10,10,10));
+            BorderPane.setAlignment(logText, Pos.TOP_LEFT);
+
+            borderPane.setCenter(logText);
+
+            vbox.getChildren().add(borderPane);
+        }
+
+        ScrollPane scrollPane = new ScrollPane(vbox);
+        scrollPane.setFitToWidth(true);
+        AnchorPane.setBottomAnchor(scrollPane, 0.0);
+        AnchorPane.setLeftAnchor(scrollPane, 0.0);
+        AnchorPane.setTopAnchor(scrollPane, 0.0);
+        AnchorPane.setRightAnchor(scrollPane, 0.0);
+
+        AnchorPane anchorPane = new AnchorPane();
+        anchorPane.setPrefWidth(window.getWidth()-400);
+        anchorPane.setMaxWidth(window.getWidth() - 400);
+        anchorPane.setStyle("-fx-background-color: white");
+
+        anchorPane.setMaxHeight(window.getHeight() - 400);
+        anchorPane.setPadding(new Insets(20, 20, 20, 20));
+        anchorPane.getChildren().add(scrollPane);
+        anchorPane.setStyle("-fx-background-color: transparent");
+
+        popOver.setContentNode(anchorPane);
+        popOver.setDetached(true);
+        popOver.setDetachedTitle("Log Entries");
+        popOver.show(logLink.getScene().getWindow());
     }
 
     private void fillContent() {
