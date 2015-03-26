@@ -30,12 +30,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -70,7 +68,7 @@ public class DatabaseUpdater {
         try {
             URL url = getUpdateFileUrl(version);
             while(url != null) {
-                executeSQL(url);
+                executeSQL(version);
                 version++;
                 url = getUpdateFileUrl(version);
             }
@@ -87,11 +85,23 @@ public class DatabaseUpdater {
         return DatabaseUpdater.class.getResource(UPDATE_FOLDER+version+SQL_EXTENSION);
     }
 
-    private void executeSQL(URL url) throws URISyntaxException, IOException {
-        List<String> lines = Files.readAllLines(Paths.get(url.toURI()), Charset.defaultCharset());
-        List<String> statements = extractStatements(lines);
-        for (String statement: statements) {
-            jdbcTemplate.execute(statement);
+    private void executeSQL(Integer version) throws URISyntaxException, IOException {
+
+        List<String> lines = new ArrayList<>();
+
+        try(InputStream in = DatabaseUpdater.class.getResourceAsStream(UPDATE_FOLDER + version + SQL_EXTENSION);
+            Reader reader = new InputStreamReader(in, Charset.defaultCharset());
+            BufferedReader bufferedReader = new BufferedReader(reader)) {
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                lines.add(line);
+            }
+
+            List<String> statements = extractStatements(lines);
+            for (String statement: statements) {
+                jdbcTemplate.execute(statement);
+            }
         }
     }
 
