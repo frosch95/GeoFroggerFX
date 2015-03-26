@@ -72,10 +72,7 @@ public class DatabaseUpdater {
                 version++;
                 url = getUpdateFileUrl(version);
             }
-        } catch (URISyntaxException e) {
-            LOGGER.log(Level.SEVERE, "file error", e);
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (URISyntaxException | IOException e) {
             LOGGER.log(Level.SEVERE, "file error", e);
             throw new RuntimeException(e);
         }
@@ -99,9 +96,7 @@ public class DatabaseUpdater {
             }
 
             List<String> statements = extractStatements(lines);
-            for (String statement: statements) {
-                jdbcTemplate.execute(statement);
-            }
+            statements.forEach(jdbcTemplate::execute);
         }
     }
 
