@@ -23,57 +23,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package de.geofroggerfx.model;
+package de.geofroggerfx.dao;
 
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import de.geofroggerfx.model.User;
+
+import java.util.List;
 
 /**
- * Created by Andreas Billmann on 22.02.2015.
+ * Created by Andreas on 27.03.2015.
  */
-public class User {
-    private LongProperty id = new SimpleLongProperty();
-    private StringProperty name = new SimpleStringProperty();
+public interface UserDAO {
 
-    public long getId() {
-        return id.get();
-    }
+    void save(User user);
+    void save(List<User> user);
 
-    public LongProperty idProperty() {
-        return id;
-    }
+    User getUser(Long id);
 
-    public void setId(long id) {
-        this.id.set(id);
-    }
-
-    public String getName() {
-        return name.get();
-    }
-
-    public StringProperty nameProperty() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        return id.equals(user.id);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
 }

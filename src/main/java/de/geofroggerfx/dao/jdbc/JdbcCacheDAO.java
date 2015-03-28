@@ -26,6 +26,7 @@
 package de.geofroggerfx.dao.jdbc;
 
 import de.geofroggerfx.dao.CacheDAO;
+import de.geofroggerfx.dao.UserDAO;
 import de.geofroggerfx.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -100,6 +101,8 @@ public class JdbcCacheDAO implements CacheDAO {
             "type",
             "text"};
 
+    @Autowired
+    private UserDAO userDAO;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -320,9 +323,6 @@ public class JdbcCacheDAO implements CacheDAO {
 
     }
 
-
-
-
     private Cache getCacheFromResultSet(ResultSet rs) throws SQLException {
         Cache cache = new Cache();
         cache.setId(rs.getLong("id"));
@@ -342,7 +342,7 @@ public class JdbcCacheDAO implements CacheDAO {
         cache.setLongDescriptionHtml(rs.getBoolean("long_description_html"));
         cache.setContainer(groundspeakStringToContainer(rs.getString("container")));
         cache.setType(groundspeakStringToType(rs.getString("type")));
-        cache.setOwner(null);
+        cache.setOwner(userDAO.getUser(rs.getLong("user_id")));
         return cache;
     }
 
@@ -365,7 +365,7 @@ public class JdbcCacheDAO implements CacheDAO {
                 cache.getEncodedHints(),
                 cache.getContainer().toGroundspeakString(),
                 cache.getType().toGroundspeakString(),
-                cache.getOwner() != null ? cache.getOwner().getId() : null };
+                cache.getOwner().getId() };
     }
 
     private Waypoint getWaypointFromResultSet(ResultSet rs) throws SQLException {
@@ -393,6 +393,7 @@ public class JdbcCacheDAO implements CacheDAO {
         log.setDate(rs.getDate("date"));
         log.setText(rs.getString("text"));
         log.setType(LogType.groundspeakStringToType(rs.getString("type")));
+        log.setFinder(userDAO.getUser(rs.getLong("user_id")));
         return log;
     }
 
@@ -424,7 +425,7 @@ public class JdbcCacheDAO implements CacheDAO {
                 log.getId(),
                 cache.getId(),
                 log.getDate(),
-                null, //log.getFinder().getId(),
+                log.getFinder().getId(),
                 log.getType().toGroundspeakString(),
                 log.getText()
         };

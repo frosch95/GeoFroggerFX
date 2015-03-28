@@ -95,9 +95,6 @@ public class GroundspeakGPXReader implements GPXReader {
 
     private final List<ProgressListener> listeners = new ArrayList<>();
 
-    private final Map<Long, User> userCache = new HashMap<>();
-
-
     @Override
     public void addListener(ProgressListener listener) {
         if (!listeners.contains(listener)) {
@@ -120,6 +117,7 @@ public class GroundspeakGPXReader implements GPXReader {
             Waypoint waypoint = null;
             Cache cache = null;
             Log log = null;
+            User user = null;
             String currentLevel = null;
             String startTag;
             StringBuffer tagContent = new StringBuffer();
@@ -167,6 +165,15 @@ public class GroundspeakGPXReader implements GPXReader {
                             case LONG_DESCRIPTION:
                                 cache.setLongDescriptionHtml(Boolean.parseBoolean(reader.getAttributeValue(0)));
                                 break;
+                            case OWNER:
+                                cache.setOwner(new User());
+                                cache.getOwner().setId(Long.parseLong(reader.getAttributeValue(0)));
+                                break;
+                            case FINDER:
+                                log.setFinder(new User());
+                                log.getFinder().setId(Long.parseLong(reader.getAttributeValue(0)));
+                                break;
+
                         }
 
                         break;
@@ -219,6 +226,7 @@ public class GroundspeakGPXReader implements GPXReader {
                                 cache.setPlacedBy(tagContent.toString());
                                 break;
                             case OWNER:
+                                cache.getOwner().setName(tagContent.toString());
                                 break;
                             case CONTAINER:
                                 cache.setContainer(Container.groundspeakStringToContainer(tagContent.toString()));
@@ -252,6 +260,9 @@ public class GroundspeakGPXReader implements GPXReader {
                                 break;
                             case TEXT:
                                 log.setText(tagContent.toString());
+                                break;
+                            case FINDER:
+                                log.getFinder().setName(tagContent.toString());
                                 break;
 
                         }

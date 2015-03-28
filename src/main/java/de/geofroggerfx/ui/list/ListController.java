@@ -71,7 +71,7 @@ public class ListController extends FXMLController {
         setCellFactory();
         sessionContext.addListener(CACHE_ENTRY_LIST, () -> Platform.runLater(this::resetCacheList));
         cacheListView.getSelectionModel().selectedItemProperty().addListener(
-                (InvalidationListener) observable -> setSelectedCacheIntoSession()
+                observable -> setSelectedCacheIntoSession()
         );
     }
 

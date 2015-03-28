@@ -26,12 +26,18 @@
 package de.geofroggerfx.service;
 
 import de.geofroggerfx.dao.CacheDAO;
+import de.geofroggerfx.dao.UserDAO;
 import de.geofroggerfx.model.Cache;
 import de.geofroggerfx.model.CacheListEntry;
+import de.geofroggerfx.model.Log;
+import de.geofroggerfx.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Andreas on 10.03.2015.
@@ -42,8 +48,14 @@ public class CacheServiceImpl implements CacheService {
     @Autowired
     private CacheDAO cacheDAO;
 
+    @Autowired
+    private UserDAO userDAO;
+
+
     @Override
     public void storeCaches(List<Cache> cacheList) {
+        List<User> users = extractUserList(cacheList);
+        userDAO.save(users);
         cacheDAO.save(cacheList);
     }
 
@@ -62,5 +74,24 @@ public class CacheServiceImpl implements CacheService {
         return cacheDAO.getAllCaches();
     }
 
+    private List<User> extractUserList(List<Cache> cacheList) {
+
+        Map<Long, User> users = new HashMap<>();
+
+        for (Cache cache: cacheList) {
+            User owner = cache.getOwner();
+            if (!users.containsKey(owner.getId())) {
+                users.put(owner.getId(), owner);
+            }
+            for (Log log: cache.getLogs()) {
+                User finder = log.getFinder();
+                if (!users.containsKey(finder.getId())) {
+                    users.put(finder.getId(), finder);
+                }
+            }
+        }
+
+        return new ArrayList(users.values());
+    }
 
 }

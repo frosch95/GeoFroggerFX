@@ -181,7 +181,7 @@ public class DetailsController extends FXMLController {
             Text icon = GeofroggerGlyphsDude.createIcon(FontAwesomeIcons.CHECK);
             Label date = new Label(log.getDate().toString());
             date.setStyle("-fx-font-weight: bold; -fx-font-size: 1.2em;");
-            Label name = new Label("the user's name");
+            Label name = new Label(log.getFinder().getName());
             name.setStyle("-fx-font-weight: bold; -fx-font-size: 1.2em;");
 
             HBox.setHgrow(icon, Priority.NEVER);
