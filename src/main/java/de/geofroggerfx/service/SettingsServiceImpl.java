@@ -25,21 +25,25 @@
  */
 package de.geofroggerfx.service;
 
-import de.geofroggerfx.model.Cache;
-import de.geofroggerfx.model.CacheListEntry;
+import de.geofroggerfx.dao.SettingsDAO;
+import de.geofroggerfx.model.Settings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class SettingsServiceImpl implements SettingsService {
 
-/**
- * Created by Andreas on 10.03.2015.
- */
-
-public interface CacheService {
+    @Autowired
+    private SettingsDAO settingsDAO;
 
 
-    void storeCaches(List<Cache> cacheList);
+    @Override
+    public void storeSettings(Settings settings) {
+        settingsDAO.save(settings);
+    }
 
-    List<CacheListEntry> getAllCacheEntriesSortBy(String name, String asc);
-
-    Cache getCacheForId(long id);
+    @Override
+    public Settings getSettings() {
+        return settingsDAO.getSettings();
+    }
 }

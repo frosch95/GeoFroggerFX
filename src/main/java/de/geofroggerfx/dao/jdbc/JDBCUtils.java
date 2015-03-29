@@ -26,11 +26,11 @@
 package de.geofroggerfx.dao.jdbc;
 
 /**
- * Created by Andreas on 11.03.2015.
+ * Utility class to generate SQL statements
  */
 public class JDBCUtils {
 
-    public static String generateSelectSQL(String table, String... columns) {
+    public static String generateSelectSQL(String table, String[] columns, String... where) {
 
         assert columns != null && columns.length > 0 : "columns must not be null or empty";
 
@@ -40,12 +40,22 @@ public class JDBCUtils {
         for (int columnCounter = 0; columnCounter < columns.length-1; columnCounter++) {
             addCommaToValue(sql, columns[columnCounter]);
         }
-        sql.append(columns[columns.length-1]);
+        sql.append(columns[columns.length - 1]);
         sql.append(" FROM ").append(table);
+
+        if (where != null && where.length > 0) {
+            sql.append(" WHERE ");
+            for (int whereCounter = 0; whereCounter < where.length - 1; whereCounter++) {
+                sql.append(where[whereCounter]).append(" AND ");
+            }
+            sql.append(where[where.length - 1]);
+        }
+
         return sql.toString();
     }
 
-    public static String generateUpdateSQL(String table, String... columns) {
+
+    public static String generateUpdateSQL(String table, String[] columns, String... where) {
 
         assert columns != null && columns.length > 0 : "columns must not be null or empty";
 
@@ -56,7 +66,14 @@ public class JDBCUtils {
             addCommaToValue(sql, columns[columnCounter]+"=? ");
         }
         sql.append(columns[columns.length-1]+"=? ");
-        sql.append(" WHERE ID = ?");
+
+        if (where != null && where.length > 0) {
+            sql.append(" WHERE ");
+            for (int whereCounter = 0; whereCounter < where.length - 1; whereCounter++) {
+                sql.append(where[whereCounter]).append(" AND ");
+            }
+            sql.append(where[where.length - 1]);
+        }
         return sql.toString();
     }
 

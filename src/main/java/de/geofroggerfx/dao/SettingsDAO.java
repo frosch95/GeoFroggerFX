@@ -23,23 +23,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package de.geofroggerfx.service;
+package de.geofroggerfx.dao;
 
-import de.geofroggerfx.model.Cache;
-import de.geofroggerfx.model.CacheListEntry;
+import de.geofroggerfx.model.Settings;
 
 import java.util.List;
 
 /**
- * Created by Andreas on 10.03.2015.
+ * Implements the DAO Pattern for the settings object.
  */
+public interface SettingsDAO {
 
-public interface CacheService {
+    /**
+     * updates the settings
+     * @param settings object
+     */
+    void save(Settings settings);
 
+    /**
+     * Returns the settings
+     * @return settings
+     */
+    Settings getSettings();
 
-    void storeCaches(List<Cache> cacheList);
-
-    List<CacheListEntry> getAllCacheEntriesSortBy(String name, String asc);
-
-    Cache getCacheForId(long id);
 }

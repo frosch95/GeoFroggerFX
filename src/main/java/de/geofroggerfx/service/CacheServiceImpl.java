@@ -26,11 +26,9 @@
 package de.geofroggerfx.service;
 
 import de.geofroggerfx.dao.CacheDAO;
+import de.geofroggerfx.dao.SettingsDAO;
 import de.geofroggerfx.dao.UserDAO;
-import de.geofroggerfx.model.Cache;
-import de.geofroggerfx.model.CacheListEntry;
-import de.geofroggerfx.model.Log;
-import de.geofroggerfx.model.User;
+import de.geofroggerfx.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,10 +49,13 @@ public class CacheServiceImpl implements CacheService {
     @Autowired
     private UserDAO userDAO;
 
+    @Autowired
+    private SettingsDAO settingsDAO;
+
 
     @Override
     public void storeCaches(List<Cache> cacheList) {
-        List<User> users = extractUserList(cacheList);
+        List<User> users = extractUserListAndMarkFound(cacheList);
         userDAO.save(users);
         cacheDAO.save(cacheList);
     }
@@ -69,29 +70,33 @@ public class CacheServiceImpl implements CacheService {
         return cacheDAO.getCacheForId(id);
     }
 
-    @Override
-    public List<Cache> getAllCaches() {
-        return cacheDAO.getAllCaches();
-    }
-
-    private List<User> extractUserList(List<Cache> cacheList) {
+    private List<User> extractUserListAndMarkFound(List<Cache> cacheList) {
 
         Map<Long, User> users = new HashMap<>();
 
+        String username = settingsDAO.getSettings().getMyUsername();
+
         for (Cache cache: cacheList) {
             User owner = cache.getOwner();
-            if (!users.containsKey(owner.getId())) {
-                users.put(owner.getId(), owner);
-            }
+            addUserToMap(users, owner);
             for (Log log: cache.getLogs()) {
                 User finder = log.getFinder();
-                if (!users.containsKey(finder.getId())) {
-                    users.put(finder.getId(), finder);
+
+                if (username.equals(finder.getName()) &&
+                        (log.getType().equals(LogType.FOUND_IT) || (log.getType().equals(LogType.ATTENDED)))) {
+                    cache.setFound(true);
                 }
+
+                addUserToMap(users, finder);
             }
         }
 
-        return new ArrayList(users.values());
+        return new ArrayList<>(users.values());
     }
 
+    private void addUserToMap(Map<Long, User> users, User finder) {
+        if (!users.containsKey(finder.getId())) {
+            users.put(finder.getId(), finder);
+        }
+    }
 }

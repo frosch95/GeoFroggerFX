@@ -29,7 +29,7 @@ class OwnStatisticsPlugin implements Plugin {
 
     @Override
     void run(final Map context) {
-        calculateStats(context.cacheService)
+        calculateStats(context.cacheDAO)
     }
 
 /**
@@ -37,9 +37,9 @@ class OwnStatisticsPlugin implements Plugin {
  * @param sessionContext context with the cache list in it
  * @return
  */
-    private void calculateStats(cacheService) {
+    private void calculateStats(cacheDAO) {
         // get the cache list from service
-        def cacheList = cacheService.getAllCaches()
+        def cacheList = cacheDAO.getAllCaches("found=true")
         service.cacheList = cacheList;
         service.restart();
     }

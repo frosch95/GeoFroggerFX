@@ -29,9 +29,11 @@ import de.geofroggerfx.application.ProgressEvent;
 import de.geofroggerfx.application.SessionContext;
 import de.geofroggerfx.gpx.GPXReader;
 import de.geofroggerfx.model.Cache;
+import de.geofroggerfx.model.Settings;
 import de.geofroggerfx.plugins.Plugin;
 import de.geofroggerfx.service.CacheService;
 import de.geofroggerfx.service.PluginService;
+import de.geofroggerfx.service.SettingsService;
 import de.geofroggerfx.ui.details.DetailsController;
 import de.geofroggerfx.ui.list.ListController;
 import javafx.application.Platform;
@@ -53,6 +55,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -108,6 +111,9 @@ public class GeoFroggerFXController extends FXMLController {
 
     @Autowired
     private CacheService cacheService;
+
+    @Autowired
+    private SettingsService settingsService;
 
     @Autowired
     private SessionContext sessionContext;
@@ -199,9 +205,17 @@ public class GeoFroggerFXController extends FXMLController {
 
     @FXML
     public void showSettings(ActionEvent actionEvent) {
-//    mainPane.setCenter();
+        Settings settings = settingsService.getSettings();
+        TextInputDialog dialog = new TextInputDialog(settings.getMyUsername());
+        dialog.setTitle("Settings");
+        dialog.setHeaderText("Settings");
+        dialog.setContentText("Please enter your name:");
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(name -> {
+            settings.setMyUsername(name);
+            settingsService.storeSettings(settings);
+        });
 
-//    FXMLLoader.load()
     }
 
     @FXML

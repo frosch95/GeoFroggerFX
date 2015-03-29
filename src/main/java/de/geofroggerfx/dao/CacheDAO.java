@@ -31,15 +31,49 @@ import de.geofroggerfx.model.CacheListEntry;
 import java.util.List;
 
 /**
- * Created by Andreas on 11.03.2015.
+ * Implements the DAO Pattern for the cache objects.
  */
 public interface CacheDAO {
 
+    /**
+     * this method should be used to batch save a list of caches.
+     * existing caches will be deleted and inserted again
+     * @param listOfCaches list of caches
+     */
     void save(List<Cache> listOfCaches);
+
+    /**
+     * updates a single cache
+     * @param cache cache to update
+     */
     void update(Cache cache);
+
+    /**
+     * return CacheEntry (a reduced object for cache list)
+     * @param name sorting name
+     * @param asc sorting direction
+     * @return list of CacheEntries
+     */
     List<CacheListEntry> getAllCacheEntriesSortBy(String name, String asc);
 
+    /**
+     * returns the asked cache
+     * @param id id of the cache
+     * @return single cache
+     */
     Cache getCacheForId(long id);
 
+    /**
+     * Returns all caches in a list (normally used by reporting plugins)
+     * @return all caches
+     */
     List<Cache> getAllCaches();
+
+    /**
+     * a list of caches filtered by where (normally used by reporting plugins)
+     * @param where where clauses combined with AND
+     * @return a list of filtered caches
+     */
+    List<Cache> getAllCaches(String... where);
+
 }

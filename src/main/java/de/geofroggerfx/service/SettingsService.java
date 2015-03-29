@@ -25,21 +25,21 @@
  */
 package de.geofroggerfx.service;
 
-import de.geofroggerfx.model.Cache;
-import de.geofroggerfx.model.CacheListEntry;
-
-import java.util.List;
+import de.geofroggerfx.model.Settings;
 
 /**
- * Created by Andreas on 10.03.2015.
+ * Service layer for storing and retrieving settings
  */
+public interface SettingsService {
+    /**
+     * Stores the settins
+     * @param settings the settings
+     */
+    void storeSettings(Settings settings);
 
-public interface CacheService {
-
-
-    void storeCaches(List<Cache> cacheList);
-
-    List<CacheListEntry> getAllCacheEntriesSortBy(String name, String asc);
-
-    Cache getCacheForId(long id);
+    /**
+     * load the settings
+     * @return the settings
+     */
+    Settings getSettings();
 }

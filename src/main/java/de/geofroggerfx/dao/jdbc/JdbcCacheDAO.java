@@ -122,9 +122,9 @@ public class JdbcCacheDAO implements CacheDAO {
 
     @Override
     public void update(Cache cache) {
-        String updateSQL = generateUpdateSQL(CACHE_TABLE, columnListCache);
+        String updateSQL = generateUpdateSQL(CACHE_TABLE, columnListCache, "ID = ?");
         jdbcTemplate.update(updateSQL, valuesFromCache(cache, cache.getId()));
-        updateSQL = generateUpdateSQL(WAYPOINT_TABLE, columnListWaypoint);
+        updateSQL = generateUpdateSQL(WAYPOINT_TABLE, columnListWaypoint, "name = ?");
         jdbcTemplate.update(updateSQL, valuesFromWaypoint(cache, cache.getMainWayPoint().getName()));
     }
 
@@ -168,8 +168,17 @@ public class JdbcCacheDAO implements CacheDAO {
                 (rs, rowNum) -> {
                     return getCacheFromResultSet(rs);
                 });
-
     }
+
+    @Override
+    public List<Cache> getAllCaches(String... where) {
+        return this.jdbcTemplate.query(
+                generateSelectSQL(CACHE_TABLE, columnListCache, where),
+                (rs, rowNum) -> {
+                    return getCacheFromResultSet(rs);
+                });
+    }
+
 
     private void batchInsertCaches(List<Cache> listOfCaches) {
         LOGGER.info("try to save " + listOfCaches.size() + " caches");

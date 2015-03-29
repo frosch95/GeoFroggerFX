@@ -17,7 +17,7 @@ class BasicListStatisticsPlugin implements Plugin {
 
     @Override
     void run(final Map context) {
-        showDialog(createContent(context.cacheService))
+        showDialog(createContent(context.cacheDAO))
     }
 
     /**
@@ -25,10 +25,10 @@ class BasicListStatisticsPlugin implements Plugin {
      * @param sessionContext context with the cache list in it
      * @return
      */
-    private javafx.scene.Node createContent(cacheService) {
+    private javafx.scene.Node createContent(cacheDAO) {
 
         // get the cache list from service
-        def cacheList = cacheService.getAllCaches()
+        def cacheList = cacheDAO.getAllCaches()
 
         // create a vbox as layout container
         VBox contenPane = new VBox()

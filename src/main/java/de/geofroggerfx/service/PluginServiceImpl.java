@@ -1,6 +1,8 @@
 package de.geofroggerfx.service;
 
 import de.geofroggerfx.application.SessionContext;
+import de.geofroggerfx.dao.CacheDAO;
+import de.geofroggerfx.dao.UserDAO;
 import de.geofroggerfx.dao.jdbc.DataConfig;
 import de.geofroggerfx.plugins.Plugin;
 import groovy.lang.GroovyClassLoader;
@@ -31,12 +33,11 @@ public class PluginServiceImpl implements PluginService {
     @Autowired
     private SessionContext sessionContext;
 
-    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private CacheDAO cacheDAO;
 
     @Autowired
-    public void setDataConfig(DataConfig dataConfig) {
-        this.jdbcTemplate = new JdbcTemplate(dataConfig.dataSource());
-    }
+    private UserDAO userDAO;
 
 
     @Override
@@ -73,7 +74,9 @@ public class PluginServiceImpl implements PluginService {
         Map<String, Object> context = new HashMap<>();
         context.put("sessionContext", sessionContext);
         context.put("cacheService", cacheService);
-        context.put("jdbcTemplate", jdbcTemplate);
+        context.put("cacheDAO", cacheDAO);
+        context.put("userDAO", userDAO);
         plugin.run(context);
     }
 }
+
