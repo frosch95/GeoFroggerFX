@@ -29,6 +29,7 @@ import de.geofroggerfx.dao.CacheDAO;
 import de.geofroggerfx.dao.UserDAO;
 import de.geofroggerfx.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Attr;
@@ -130,17 +131,26 @@ public class JdbcCacheDAO implements CacheDAO {
 
     @Override
     public List<CacheListEntry> getAllCacheEntriesSortBy(String name, String asc) {
-        return this.jdbcTemplate.query(
-                "SELECT c.id, c.name AS name, c.name AS code, c.difficulty, c.terrain, c.type FROM " + CACHE_TABLE + " c ORDER BY " + name + " " + asc,
-                (rs, rowNum) -> {
-                    return new CacheListEntry(
-                            rs.getLong("id"),
-                            rs.getString("name"),
-                            rs.getString("code"),
-                            rs.getString("difficulty"),
-                            rs.getString("terrain"),
-                            groundspeakStringToType(rs.getString("type")));
-                });
+        try {
+            return this.jdbcTemplate.query(
+                    "SELECT c.id, c.name AS name, c.name AS code, c.difficulty, c.terrain, c.type, c.available, c.archived, c.found " +
+                            " FROM " + CACHE_TABLE + " c ORDER BY " + name + " " + asc,
+                    (rs, rowNum) -> {
+                        return new CacheListEntry(
+                                rs.getLong("id"),
+                                rs.getString("name"),
+                                rs.getString("code"),
+                                rs.getString("difficulty"),
+                                rs.getString("terrain"),
+                                groundspeakStringToType(rs.getString("type")),
+                                rs.getBoolean("found"),
+                                rs.getBoolean("archived"),
+                                rs.getBoolean("available"));
+                    });
+        } catch (Throwable e) {
+            LOGGER.log(Level.SEVERE, "error", e);
+            return null;
+        }
     }
 
     @Override

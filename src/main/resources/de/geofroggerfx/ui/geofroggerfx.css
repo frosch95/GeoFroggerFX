@@ -2,3 +2,11 @@
     -fx-font-size: 24pt;
     -fx-font-family: "Sofia-Regular";
 }
+
+.cache-list-cell.not-available .label .text {
+    -fx-fill: #ff3333;
+}
+
+.cache-list-cell.archived .label .text {
+    -fx-fill: #aaaaaa;
+}

@@ -48,11 +48,13 @@ public class CacheListCell extends ListCell<CacheListEntry> {
     private static final String GRAY = ";-fx-fill: linear-gradient(#cccccc 0%, #999999 70%, #888888 85%);";
     private final GridPane grid = new GridPane();
     private final Text icon = GlyphsDude.createIcon(FontAwesomeIcons.BLANK, "20.0");
+    private final Text foundIcon = GlyphsDude.createIcon(FontAwesomeIcons.BLANK, "10.0");
     private final Label name = new Label();
     private final Text difficultyStars = GlyphsDude.createIcon(FontAwesomeIcons.BLANK, "8.0");
     private final Text terrainStars = GlyphsDude.createIcon(FontAwesomeIcons.BLANK, "8.0");
 
     public CacheListCell() {
+        this.getStyleClass().add("cache-list-cell");
         configureGrid();
         configureIcon();
         configureName();
@@ -68,6 +70,22 @@ public class CacheListCell extends ListCell<CacheListEntry> {
             clearContent();
         } else {
             addContent(cache);
+            updateCellState(cache);
+        }
+    }
+
+    private void updateCellState(CacheListEntry cache) {
+
+        if (cache.getArchived()) {
+            this.getStyleClass().add("archived");
+        } else {
+            this.getStyleClass().remove("archived");
+        }
+
+        if (cache.getAvailable()) {
+            this.getStyleClass().remove("not-available");
+        } else {
+            this.getStyleClass().add("not-available");
         }
     }
 
@@ -87,7 +105,10 @@ public class CacheListCell extends ListCell<CacheListEntry> {
         ColumnConstraints column5 = new ColumnConstraints(30 , 50 , Double.MAX_VALUE);
         column5.setHgrow(Priority.ALWAYS);
         column5.setFillWidth(true);
-        grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5);
+        ColumnConstraints column6 = new ColumnConstraints(10, 12, 16);
+        column6.setHgrow(Priority.NEVER);
+        column6.setFillWidth(false);
+        grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5, column6);
     }
 
     private void configureIcon() {
@@ -110,6 +131,7 @@ public class CacheListCell extends ListCell<CacheListEntry> {
     private void addControlsToGrid() {
         grid.add(icon, 0, 0, 1, 2);
         grid.add(name, 1, 0, 4, 1);
+        grid.add(foundIcon, 5, 0);
         grid.add(new Label("Difficulty:"), 1, 1);
         grid.add(difficultyStars, 2, 1);
         grid.add(new Label("Terrain:"), 3, 1);
@@ -123,6 +145,7 @@ public class CacheListCell extends ListCell<CacheListEntry> {
 
     private void addContent(CacheListEntry cache) {
         setIcon(cache);
+        setFoundIcon(cache);
         setCacheName(cache);
         setDifficulty(cache);
         setTerrain(cache);
@@ -135,6 +158,14 @@ public class CacheListCell extends ListCell<CacheListEntry> {
 
     private void setIcon(CacheListEntry cache) {
         icon.setText(GeocachingIcons.getIconAsString(cache.getType()));
+    }
+
+    private void setFoundIcon(CacheListEntry cache) {
+        if (cache.getFound()) {
+            foundIcon.setText(FontAwesomeIcons.CHECK.characterToString());
+        } else {
+            foundIcon.setText(FontAwesomeIcons.BLANK.characterToString());
+        }
     }
 
     private void setDifficulty(CacheListEntry cache) {

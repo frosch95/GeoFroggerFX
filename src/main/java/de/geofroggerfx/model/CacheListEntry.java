@@ -28,7 +28,7 @@ package de.geofroggerfx.model;
 import javafx.beans.property.*;
 
 /**
- * Created by Andreas on 10.03.2015.
+ * This class represents a list entry. It is a reduced version of cache.
  */
 public class CacheListEntry {
 
@@ -38,19 +38,28 @@ public class CacheListEntry {
     private StringProperty terrain = new SimpleStringProperty();
     private StringProperty code = new SimpleStringProperty();
     private ObjectProperty<Type> type = new SimpleObjectProperty<>();
+    private BooleanProperty found = new SimpleBooleanProperty();
+    private BooleanProperty archived = new SimpleBooleanProperty();
+    private BooleanProperty available = new SimpleBooleanProperty();
 
     public CacheListEntry(long id,
                           String name,
                           String code,
                           String difficulty,
                           String terrain,
-                          Type type) {
+                          Type type,
+                          boolean found,
+                          boolean archived,
+                          boolean available) {
         this.id.setValue(id);
         this.name.setValue(name);
         this.code.setValue(code);
         this.difficulty.setValue(difficulty);
         this.terrain.setValue(terrain);
         this.type.setValue(type);
+        this.found.setValue(found);
+        this.archived.setValue(archived);
+        this.available.setValue(available);
     }
 
     public String getName() {
@@ -99,6 +108,30 @@ public class CacheListEntry {
 
     public ReadOnlyObjectProperty<Type> typeProperty() {
         return type;
+    }
+
+    public boolean getFound() {
+        return found.get();
+    }
+
+    public ReadOnlyBooleanProperty foundProperty() {
+        return found;
+    }
+
+    public boolean getArchived() {
+        return archived.get();
+    }
+
+    public ReadOnlyBooleanProperty archivedProperty() {
+        return archived;
+    }
+
+    public boolean getAvailable() {
+        return available.get();
+    }
+
+    public ReadOnlyBooleanProperty availableProperty() {
+        return available;
     }
 
     @Override
