@@ -98,15 +98,15 @@ public class GeoFroggerFXController extends FXMLController {
 
     private static final String MASTHEAD_TEXT = "GeoFroggerFX by Andreas Billmann <abi@geofroggerfx.de>";
     private static final String ABOUT_TEXT = "Used libs:\n"
-            + "\t- Groovy 2.0.4\n"
-            + "\t- ControlsFX 8.20.8\n"
-            + "\t- fontawesomefx 8.2\n"
-            + "\t- H2 1.4.186\n"
-            + "\t- GMapsFX 1.1.1\n"
-            + "\t- Spring Framework 4.1.5\n"
+            + "\t- Groovy 2.4.7\n"
+            + "\t- ControlsFX 8.40.11\n"
+            + "\t- fontawesomefx-commons 8.12\n"
+            + "\t- fontawesomefx-materialdesignfont 1.6.50\n"
+            + "\t- H2 1.4.192\n"
+            + "\t- GMapsFX 2.0.9\n"
+            + "\t- Spring Framework 4.3.2\n"
             + "\t- Woodstox 4.4.1\n"
-            + "\t- Sofia-Regular Font\n"
-            + "\t- Elusive-Icons Font\n";
+            + "\t- Sofia-Regular Font\n";
 
 
     @Autowired
