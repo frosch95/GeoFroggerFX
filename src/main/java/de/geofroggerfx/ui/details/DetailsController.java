@@ -34,8 +34,10 @@ import de.geofroggerfx.model.Attribute;
 import de.geofroggerfx.model.Cache;
 import de.geofroggerfx.model.Log;
 import de.geofroggerfx.ui.FXMLController;
-import de.geofroggerfx.ui.glyphs.GeofroggerGlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;
+import de.geofroggerfx.ui.GeocachingIcons;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import de.jensd.fx.glyphs.materialdesignicons.utils.MaterialDesignIconFactory;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -54,9 +56,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static de.geofroggerfx.application.SessionContext.CURRENT_CACHE;
-import static de.geofroggerfx.ui.GeocachingIcons.getIcon;
 import static de.geofroggerfx.ui.GeocachingIcons.getStarsAsString;
-import static de.jensd.fx.glyphs.GlyphsDude.createIcon;
+import static de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon.CHECK;
 
 /**
  * Created by Andreas on 09.03.2015.
@@ -149,7 +150,7 @@ public class DetailsController extends FXMLController {
     }
 
     private void setLogLinkButton() {
-        Button logLink = GeofroggerGlyphsDude.createIconButton(FontAwesomeIcons.EXTERNAL_LINK);
+        Button logLink = MaterialDesignIconFactory.get().createIconButton(MaterialDesignIcon.LINK_VARIANT);
         logLink.setStyle("-fx-background-color: transparent;");
         logButtonPane.getChildren().add(logLink);
 
@@ -178,7 +179,7 @@ public class DetailsController extends FXMLController {
 
             BorderPane borderPane = new BorderPane();
 
-            Text icon = GeofroggerGlyphsDude.createIcon(FontAwesomeIcons.CHECK);
+            Text icon = new MaterialDesignIconView(CHECK);
             Label date = new Label(log.getDate().toString());
             date.setStyle("-fx-font-weight: bold; -fx-font-size: 1.2em;");
             Label name = new Label(log.getFinder().getName());
@@ -225,7 +226,7 @@ public class DetailsController extends FXMLController {
 
         popOver.setContentNode(anchorPane);
         popOver.setDetached(true);
-        popOver.setDetachedTitle("Log Entries");
+        //popOver.setDetachedTitle("Log Entries");
         popOver.show(logLink.getScene().getWindow());
     }
 
@@ -251,7 +252,7 @@ public class DetailsController extends FXMLController {
 
         attributeList.getChildren().clear();
         for (Attribute attribute: cache.getAttributes()) {
-            attributeList.getChildren().add(createIcon(getIcon(attribute), "1.6em"));
+            attributeList.getChildren().add(MaterialDesignIconFactory.get().createIcon(GeocachingIcons.getIcon(attribute)));
         }
 
         logList.getChildren().clear();
@@ -276,7 +277,7 @@ public class DetailsController extends FXMLController {
     }
 
     private void setLogIcon(int row) {
-        logList.add(GeofroggerGlyphsDude.createIcon(FontAwesomeIcons.CHECK), 0, row);
+        logList.add(MaterialDesignIconFactory.get().createIcon(CHECK), 0, row);
     }
 
     private void setLogText(int row, Log log) {

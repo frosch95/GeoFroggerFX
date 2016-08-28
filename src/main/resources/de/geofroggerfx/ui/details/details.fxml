@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import com.lynden.gmapsfx.*?>
-<?import de.jensd.fx.glyphs.fontawesome.*?>
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.web.*?>
 <?import com.lynden.gmapsfx.GoogleMapView?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.WebView?>
 <?import java.net.URL?>
-
 <BorderPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="400" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
     <right>
         <VBox minWidth="200.0" prefHeight="200.0" spacing="8.0" BorderPane.alignment="CENTER">
@@ -82,9 +73,9 @@
             <children>
                 <Label fx:id="cacheName" styleClass="cache-h1" text="Cache-Name" GridPane.columnSpan="4" />
                 <Label text="Difficulty:" GridPane.rowIndex="1" />
-                <FontAwesomeIcon fx:id="cacheDifficulty" glyphName="BLANK" glyphStyle="-fx-fill: linear-gradient(#e8e474 0%, #edcf59 70%, #bfba26 85%);" size="16.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <MaterialDesignIconView fx:id="cacheDifficulty" glyphName="STAR" glyphStyle="-fx-fill: linear-gradient(#e8e474 0%, #edcf59 70%, #bfba26 85%);" size="16.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Label text="Terrain:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                <FontAwesomeIcon fx:id="cacheTerrain" glyphName="BLANK" glyphStyle="-fx-fill: linear-gradient(#e8e474 0%, #edcf59 70%, #bfba26 85%);" size="16.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <MaterialDesignIconView fx:id="cacheTerrain" glyphName="STAR" glyphStyle="-fx-fill: linear-gradient(#e8e474 0%, #edcf59 70%, #bfba26 85%);" size="16.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             </children>
         </GridPane>
     </top>

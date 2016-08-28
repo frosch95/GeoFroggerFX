@@ -27,8 +27,8 @@ package de.geofroggerfx.ui.list;
 
 import de.geofroggerfx.model.CacheListEntry;
 import de.geofroggerfx.ui.GeocachingIcons;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.utils.MaterialDesignIconFactory;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -37,6 +37,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 
+import static de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon.CHECKBOX_BLANK_OUTLINE;
 
 /**
  * Multi-Column-Row list cell to shows the most important data in a list.
@@ -47,11 +48,11 @@ public class CacheListCell extends ListCell<CacheListEntry> {
     private static final String YELLOW = ";-fx-fill: linear-gradient(#e8e474 0%, #edcf59 70%, #bfba26 85%);";
     private static final String GRAY = ";-fx-fill: linear-gradient(#cccccc 0%, #999999 70%, #888888 85%);";
     private final GridPane grid = new GridPane();
-    private final Text icon = GlyphsDude.createIcon(FontAwesomeIcons.BLANK, "20.0");
-    private final Text foundIcon = GlyphsDude.createIcon(FontAwesomeIcons.BLANK, "10.0");
+    private final Text icon = MaterialDesignIconFactory.get().createIcon(CHECKBOX_BLANK_OUTLINE, "20.0");
+    private final Text foundIcon = MaterialDesignIconFactory.get().createIcon(CHECKBOX_BLANK_OUTLINE, "10.0");
     private final Label name = new Label();
-    private final Text difficultyStars = GlyphsDude.createIcon(FontAwesomeIcons.BLANK, "8.0");
-    private final Text terrainStars = GlyphsDude.createIcon(FontAwesomeIcons.BLANK, "8.0");
+    private final Text difficultyStars = MaterialDesignIconFactory.get().createIcon(CHECKBOX_BLANK_OUTLINE, "8.0");
+    private final Text terrainStars = MaterialDesignIconFactory.get().createIcon(CHECKBOX_BLANK_OUTLINE, "8.0");
 
     public CacheListCell() {
         this.getStyleClass().add("cache-list-cell");
@@ -162,9 +163,9 @@ public class CacheListCell extends ListCell<CacheListEntry> {
 
     private void setFoundIcon(CacheListEntry cache) {
         if (cache.getFound()) {
-            foundIcon.setText(FontAwesomeIcons.CHECK.characterToString());
+            foundIcon.setText(MaterialDesignIcon.CHECK.characterToString());
         } else {
-            foundIcon.setText(FontAwesomeIcons.BLANK.characterToString());
+            foundIcon.setText("");
         }
     }
 

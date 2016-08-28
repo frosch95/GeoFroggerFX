@@ -9,18 +9,20 @@ mainClassName = 'de.geofroggerfx.ui.GeoFroggerFX'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.0'
-    compile group: 'org.springframework', name:'spring-context', version: '4.1.5.RELEASE'
-    compile group: 'org.springframework', name:'spring-jdbc', version: '4.1.5.RELEASE'
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.7'
+    compile group: 'org.springframework', name:'spring-context', version: '4.3.2.RELEASE'
+    compile group: 'org.springframework', name:'spring-jdbc', version: '4.3.2.RELEASE'
     compile group: 'org.codehaus.woodstox', name: 'woodstox-core-asl', version: '4.4.1'
     compile group: 'org.codehaus.woodstox', name: 'stax2-api', version: '4.0.0'
-    compile group: 'com.h2database', name: 'h2', version: '1.4.186'
-    compile group: 'de.jensd', name: 'fontawesomefx', version: '8.2'
-    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.20.8'
-    compile group: 'com.lynden', name: 'GMapsFX', version: '1.1.1'
+    compile group: 'com.h2database', name: 'h2', version: '1.4.192'
+    compile group: 'de.jensd', name: 'fontawesomefx-commons', version: '8.12'
+    compile group: 'de.jensd', name: 'fontawesomefx-materialdesignfont', version: '1.6.50'
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.11'
+    compile group: 'com.lynden', name: 'GMapsFX', version: '2.0.9'
 }
 
