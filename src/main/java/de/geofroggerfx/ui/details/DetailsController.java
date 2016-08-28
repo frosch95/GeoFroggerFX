@@ -26,10 +26,8 @@
 package de.geofroggerfx.ui.details;
 
 import com.lynden.gmapsfx.GoogleMapView;
-import com.lynden.gmapsfx.MapComponentInitializedListener;
 import com.lynden.gmapsfx.javascript.object.*;
 import de.geofroggerfx.application.SessionContext;
-import de.geofroggerfx.application.SessionContextListener;
 import de.geofroggerfx.model.Attribute;
 import de.geofroggerfx.model.Cache;
 import de.geofroggerfx.model.Log;
@@ -67,6 +65,9 @@ public class DetailsController extends FXMLController {
 
     @Autowired
     private SessionContext sessionContext;
+
+    @FXML
+    private BorderPane detailsPane;
 
     @FXML
     private Label cacheName;
@@ -107,45 +108,38 @@ public class DetailsController extends FXMLController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        detailsPane.setVisible(false);
         setCacheListener();
         initializeMap();
         setLogLinkButton();
     }
 
     private void setCacheListener() {
-        sessionContext.addListener(CURRENT_CACHE, new SessionContextListener() {
-            @Override
-            public void sessionContextChanged() {
-                fillContent();
-            }
-        });
+        sessionContext.addListener(CURRENT_CACHE, () -> fillContent());
     }
 
     private void initializeMap() {
-        mapView.addMapInializedListener(new MapComponentInitializedListener() {
-            @Override
-            public void mapInitialized() {
-                //Set the initial properties of the map.
-                MapOptions mapOptions = new MapOptions();
-                mapOptions.center(new LatLong(47.6097, -122.3331))
-                        .mapType(MapTypeIdEnum.ROADMAP)
-                        .overviewMapControl(false)
-                        .panControl(false)
-                        .rotateControl(false)
-                        .scaleControl(false)
-                        .streetViewControl(false)
-                        .zoomControl(false)
-                        .zoom(12);
+        mapView.addMapInializedListener(() -> {
+            //Set the initial properties of the map.
+            MapOptions mapOptions = new MapOptions();
+            mapOptions.center(new LatLong(47.6097, -122.3331))
+                    .mapType(MapTypeIdEnum.ROADMAP)
+                    .overviewMapControl(false)
+                    .panControl(false)
+                    .rotateControl(false)
+                    .scaleControl(false)
+                    .streetViewControl(false)
+                    .zoomControl(false)
+                    .zoom(12);
 
-                map = mapView.createMap(mapOptions);
+            map = mapView.createMap(mapOptions);
 
-                LatLong latLong = new LatLong(49.045458, 9.189835);
-                MarkerOptions options = new MarkerOptions();
-                options.position(latLong);
-                marker = new Marker(options);
-                map.addMarker(marker);
-                map.setCenter(latLong);
-            }
+            LatLong latLong = new LatLong(49.045458, 9.189835);
+            MarkerOptions options = new MarkerOptions();
+            options.position(latLong);
+            marker = new Marker(options);
+            map.addMarker(marker);
+            map.setCenter(latLong);
         });
     }
 
@@ -232,48 +226,54 @@ public class DetailsController extends FXMLController {
 
     private void fillContent() {
         Cache cache = (Cache) sessionContext.getData(CURRENT_CACHE);
-        cacheName.setText(cache.getName());
-        cacheDifficulty.setText(getStarsAsString(cache.getDifficulty()));
-        cacheTerrain.setText(getStarsAsString(cache.getTerrain()));
 
-        String shortDescription = cache.getShortDescription();
-        if (!cache.getLongDescriptionHtml()) {
-            shortDescription = shortDescription.replaceAll("\n","</br>");
+        if (cache != null) {
+            detailsPane.setVisible(true);
+            cacheName.setText(cache.getName());
+            cacheDifficulty.setText(getStarsAsString(cache.getDifficulty()));
+            cacheTerrain.setText(getStarsAsString(cache.getTerrain()));
+
+            String shortDescription = cache.getShortDescription();
+            if (!cache.getLongDescriptionHtml()) {
+                shortDescription = shortDescription.replaceAll("\n", "</br>");
+            }
+
+            String longDescription = cache.getLongDescription();
+            if (!cache.getLongDescriptionHtml()) {
+                longDescription = longDescription.replaceAll("\n", "</br>");
+            }
+
+            String description = "<html><body><p>" + shortDescription + "</p><p>" + longDescription + "</p></body></html>";
+            final WebEngine webEngine = this.description.getEngine();
+            webEngine.loadContent(description);
+
+            attributeList.getChildren().clear();
+            for (Attribute attribute : cache.getAttributes()) {
+                attributeList.getChildren().add(MaterialDesignIconFactory.get().createIcon(GeocachingIcons.getIcon(attribute)));
+            }
+
+            logList.getChildren().clear();
+            int maxRow = Math.min(4, cache.getLogs().size());
+            for (int row = 0; row < maxRow; row++) {
+                setLogIcon(row);
+                setLogText(row, cache.getLogs().get(row));
+            }
+
+            LatLong latLong = new LatLong(cache.getMainWayPoint().getLatitude(), cache.getMainWayPoint().getLongitude());
+            MarkerOptions options = new MarkerOptions();
+            options.position(latLong);
+            options.title(cache.getMainWayPoint().getName());
+
+            map.removeMarker(marker);
+
+            marker.setTitle(cache.getMainWayPoint().getName());
+            marker = new Marker(options);
+            map.addMarker(marker);
+            map.setCenter(latLong);
+            mapView.requestLayout();
+        } else {
+            detailsPane.setVisible(false);
         }
-
-        String longDescription = cache.getLongDescription();
-        if (!cache.getLongDescriptionHtml()) {
-            longDescription = longDescription.replaceAll("\n","</br>");
-        }
-
-        String description = "<html><body><p>"+shortDescription+"</p><p>"+longDescription+"</p></body></html>";
-        final WebEngine webEngine = this.description.getEngine();
-        webEngine.loadContent(description);
-
-        attributeList.getChildren().clear();
-        for (Attribute attribute: cache.getAttributes()) {
-            attributeList.getChildren().add(MaterialDesignIconFactory.get().createIcon(GeocachingIcons.getIcon(attribute)));
-        }
-
-        logList.getChildren().clear();
-        int maxRow = Math.min(4, cache.getLogs().size());
-        for (int row=0; row<maxRow; row++) {
-            setLogIcon(row);
-            setLogText(row, cache.getLogs().get(row));
-        }
-
-        LatLong latLong = new LatLong(cache.getMainWayPoint().getLatitude(), cache.getMainWayPoint().getLongitude());
-        MarkerOptions options = new MarkerOptions();
-        options.position(latLong);
-        options.title(cache.getMainWayPoint().getName());
-
-        map.removeMarker(marker);
-
-        marker.setTitle(cache.getMainWayPoint().getName());
-        marker = new Marker(options);
-        map.addMarker(marker);
-        map.setCenter(latLong);
-        mapView.requestLayout();
     }
 
     private void setLogIcon(int row) {
